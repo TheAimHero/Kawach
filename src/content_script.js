@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
 import captureFrame from './js/captureFrame';
 import filterImages from './js/filterImages';
-import filterAndReplaceText from './js/filterText';
+import filterText from './js/filterText';
 
 // Add the listner to the video
-const { body } = document;
 const videoArray = document.getElementsByTagName('video');
 const video = videoArray[0];
 
@@ -23,5 +22,5 @@ if (video) {
   }, 3000);
 }
 
-filterAndReplaceText(body);
+filterText();
 filterImages();
