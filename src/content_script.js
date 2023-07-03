@@ -28,3 +28,8 @@ chrome.runtime.onMessage.addListener((message) => {
   if (message.action !== 'censorText') return;
   filterText(message.selectedText);
 });
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action !== 'censorDomains') return;
+  filterImages(message.selectedText);
+});

@@ -21,26 +21,30 @@
     "64": "img/64.png"
   },
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "dist/background.bundle.js"
+    ],
     "persistent": true
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["dist/content_script.bundle.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "dist/content_script.bundle.js"
+      ],
       "run_at": "document_end"
     }
   ],
   "permissions": [
     "privacy",
-    "active_tab",
     "storage",
     "tabs",
     "contextMenus",
     "webRequest",
     "webRequestBlocking",
-    "http://*/*",
-    "https://*/*"
+    "<all_urls>"
   ],
   "short_name": "TBD",
   "version": "0.0.1"

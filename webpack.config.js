@@ -3,10 +3,15 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/content_script.js',
-  mode: 'development',
+  devtool: 'nosources-source-map',
+  stats: { errors: false },
+  mode: 'production',
+  entry: {
+    content_script: './src/content_script.js',
+    background: './src/background.js',
+  },
   output: {
-    filename: 'content_script.bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'src/dist'),
   },
   devServer: {
