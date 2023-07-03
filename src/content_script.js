@@ -7,7 +7,6 @@ import filterText from './js/filterText';
 const videoArray = document.getElementsByTagName('video');
 const video = videoArray[0];
 
-console.log(video);
 // @todo: find a way to disable on hover playback
 if (video) {
   const canvas = document.createElement('canvas');
@@ -24,3 +23,8 @@ if (video) {
 
 filterText();
 filterImages();
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action !== 'censorText') return;
+  filterText(message.selectedText);
+});

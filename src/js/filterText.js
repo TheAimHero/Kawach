@@ -1,18 +1,18 @@
-const censoredWords = ['sex', 'fuck'];
-
-// Regular expression pattern to match the words
-
+let censoredWords;
 // Function to censor the text
 function censorText(node) {
-  censoredWords.forEach((word) => {
-    const pattern = new RegExp(word, 'gi');
-    if (node.nodeType === Node.TEXT_NODE && pattern.test(node.textContent)) {
-      const censoredText = node.textContent.replace(
-        pattern,
-        '*'.repeat(word.length),
-      );
-      node.textContent = censoredText;
-    }
+  chrome.storage.sync.get('censoredWords', (data) => {
+    censoredWords = data.censoredWords || [];
+    censoredWords.forEach((word) => {
+      const pattern = new RegExp(word, 'gi');
+      if (node.nodeType === Node.TEXT_NODE && pattern.test(node.textContent)) {
+        const censoredText = node.textContent.replace(
+          pattern,
+          '*'.repeat(word.length),
+        );
+        node.textContent = censoredText;
+      }
+    });
   });
 }
 
@@ -36,17 +36,20 @@ function handleMutation(mutationsList) {
 // Create a mutation observer
 const observer = new MutationObserver(handleMutation);
 
-// Call the traverseDOM function when the page has finished loading
-function filterText() {
-  window.addEventListener('load', () => {
-    traverseDOM(document.body);
+// Call the traverseDOM function even when the page has not finished loading
+function filterText(addWord) {
+  if (addWord && addWord !== '') {
+    addWord.trim().toLowerCase();
+    censoredWords.push(addWord);
+    chrome.storage.sync.set({ censoredWords });
+  }
+  traverseDOM(document.body);
 
-    // Observe changes in the DOM tree
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
+  // Observe changes in the DOM tree
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true,
   });
 }
 

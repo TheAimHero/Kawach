@@ -27,7 +27,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/content_script.bundle.js"]
+      "js": ["dist/content_script.bundle.js"],
+      "run_at": "document_end"
     }
   ],
   "permissions": [
@@ -35,6 +36,7 @@
     "active_tab",
     "storage",
     "tabs",
+    "contextMenus",
     "webRequest",
     "webRequestBlocking",
     "http://*/*",

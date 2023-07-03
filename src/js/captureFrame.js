@@ -6,7 +6,6 @@ function captureFrame(video, context, canvas) {
 
   // Access the captured frame data
   const imageDataURL = canvas.toDataURL('image/png');
-  console.log(imageDataURL);
   return imageDataURL;
 }
 
