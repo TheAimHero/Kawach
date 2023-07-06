@@ -2,6 +2,7 @@
 import captureFrame from './js/captureFrame';
 import filterImages from './js/filterImages';
 import filterText from './js/filterText';
+import filterSelectedImage from './js/filterSelectedImage';
 
 // Add the listner to the video
 const videoArray = document.getElementsByTagName('video');
@@ -27,9 +28,8 @@ filterImages();
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.action === 'censorText') {
-    filterText(message.selectedText);}
-
-chrome.runtime.onMessage.addListener((message) => {
-  if (message.action !== 'censorDomains') return;
-  filterImages(message.selectedText);
+    filterText(message.selectedText);
+  } else if (message.action === 'censorImage') {
+    filterSelectedImage(message.imgSrc);
+  }
 });

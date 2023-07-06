@@ -1,20 +1,30 @@
-// import filterDomain from './js/filterDomains';
+import { blockedWords, blockedDomains } from './utils/data';
 /* eslint-disable no-console */
-// Create a context menu
 chrome.contextMenus.create({
-  id: 'censorContextMenu',
+  id: 'censorText',
   title: 'Censor Word',
   contexts: ['selection'],
 });
 
+chrome.contextMenus.create({
+  id: 'censorImage',
+  title: 'Censor Image',
+  contexts: ['image'],
+});
+
 chrome.storage.sync.get('censoredWords', (data) => {
   if (!data.censoredWords) {
-    chrome.storage.sync.set({ censoredWords: ['sex', 'fuck', 'ass', 'tits'] });
+    chrome.storage.sync.set({ censoredWords: blockedWords });
   }
 });
 
-chrome.storage.sync.set({
-  censoredDomains: ['pornhub', 'redtube', 'pornstar', 'xxx', 'xxnx'],
+chrome.storage.sync.get('censoredDomains', (data) => {
+  if (!data.censoredDomains) {
+    chrome.storage.sync.set({
+      // prettier-ignore
+      censoredDomains: blockedDomains,
+    });
+  }
 });
 
 let censoredDomains;
@@ -36,8 +46,15 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 // Add a listener for the context menu click event
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === 'censorContextMenu') {
+  if (info.menuItemId === 'censorText') {
     const selectedText = info.selectionText;
     chrome.tabs.sendMessage(tab.id, { action: 'censorText', selectedText });
+  } else if (info.menuItemId === 'censorImage') {
+    const imgSrc = info.srcUrl;
+    chrome.tabs.sendMessage(tab.id, { action: 'censorImage', imgSrc });
   }
+});
+
+chrome.storage.sync.get(null, (data) => {
+  console.log(data);
 });
