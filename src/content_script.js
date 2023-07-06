@@ -17,7 +17,8 @@ if (video) {
   });
 
   setInterval(() => {
-    console.log(captureFrame(video, context, canvas));
+    // console.log(captureFrame(video, context, canvas));
+    captureFrame(video, context, canvas);
   }, 3000);
 }
 
@@ -25,9 +26,8 @@ filterText();
 filterImages();
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.action !== 'censorText') return;
-  filterText(message.selectedText);
-});
+  if (message.action === 'censorText') {
+    filterText(message.selectedText);}
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.action !== 'censorDomains') return;
