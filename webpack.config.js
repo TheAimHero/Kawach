@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
   devtool: 'nosources-source-map',
-  stats: { errors: false },
+  stats: { errors: true },
   mode: 'production',
   entry: {
     content_script: './src/content_script.js',
