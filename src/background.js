@@ -50,6 +50,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     const selectedText = info.selectionText;
     chrome.tabs.sendMessage(tab.id, { action: 'censorText', selectedText });
   } else if (info.menuItemId === 'censorImage') {
+    console.log(info);
     const imgSrc = info.srcUrl;
     chrome.tabs.sendMessage(tab.id, { action: 'censorImage', imgSrc });
   }

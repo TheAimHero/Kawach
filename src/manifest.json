@@ -5,6 +5,7 @@
     "default_title": "TBD",
     "default_popup": "html/popup.html"
   },
+  "_version": "0.0.1",
   "manifest_version": 2,
   "name": "TBD",
   "options_ui": {
@@ -16,22 +17,20 @@
     "64": "img/64.png"
   },
   "background": {
-    "scripts": [
-      "dist/background.bundle.js"
-    ],
+    "scripts": ["dist/background.bundle.js"],
     "persistent": true
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "dist/content_script.bundle.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["dist/content_script.bundle.js"],
       "run_at": "document_end"
     }
   ],
+  "host_permissions": ["<all_urls>"],
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  },
   "permissions": [
     "privacy",
     "storage",
@@ -41,6 +40,8 @@
     "webRequestBlocking",
     "<all_urls>"
   ],
+  "web_accessible_resources": ["model/*"],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "short_name": "TBD",
   "version": "0.0.1"
 }

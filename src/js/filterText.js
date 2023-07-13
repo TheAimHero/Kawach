@@ -38,8 +38,9 @@ const observer = new MutationObserver(handleMutation);
 
 // Call the traverseDOM function even when the page has not finished loading
 function filterText(addWord) {
-  addWord?.trim()?.toLowerCase();
   if (addWord && addWord !== '') {
+    addWord.trim().toLowerCase();
+    if (addWord.length === '') return;
     censoredWords.push(addWord);
     chrome.storage.sync.set({ censoredWords });
   }

@@ -1,40 +1,22 @@
-// Function to censor the text
-function censorImage(node) {
-  if (node.tagName === 'IMG') {
-    // node.style.filter = 'blur(5px)';
-  }
-}
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
+import runModel from '../utils/runModel';
 
-// Function to recursively traverse the DOM tree and censor text
-function traverseDOM(node) {
-  censorImage(node);
-  node.childNodes.forEach(traverseDOM);
-}
-
-// Callback function for the mutation observer
-function handleMutation(mutationsList) {
-  mutationsList.forEach((mutation) => {
-    if (mutation.type === 'childList') {
-      mutation.addedNodes.forEach(traverseDOM);
-    } else if (mutation.type === 'characterData') {
-      censorImage(mutation.target);
+async function filterImages(src = '') {
+  try {
+    let imgElement;
+    if (src !== '') {
+      imgElement = document.querySelector(`img[src="${src}"]`);
+    } else {
+      // eslint-disable-next-line prefer-destructuring
+      imgElement = document.getElementsByTagName('img')[4];
     }
-  });
-}
-
-// Create a mutation observer
-const observer = new MutationObserver(handleMutation);
-
-// Call the traverseDOM function even when the page has not finished loading
-function filterImages() {
-  traverseDOM(document.body);
-
-  // Observe changes in the DOM tree
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
+    imgElement.crossOrigin = 'anonymous';
+    // donst prediction = await runModel(imgElement);
+    // console.log(prediction);
+  } catch (e) {
+    console.error(e.message);
+  }
 }
 
 export default filterImages;
