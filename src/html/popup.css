@@ -1,0 +1,53 @@
+body {
+  height: 150px;
+  width: 300px;
+  margin: 0;
+  color: white;
+  background-color: grey;
+  padding: 30px 30px;
+}
+
+.circle_grp {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
+  background-color: red;
+  padding: 30px 30px;
+  border-radius: 50%;
+}
+
+.circle:hover {
+  background-color: blue;
+}
+
+.badge_grp {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  margin-inline: 50px;
+  gap: 30px;
+}
+
+.badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  object-fit: cover;
+  background-color: blue;
+  padding: 10px 30px;
+}
+
+.badge:hover {
+  background-color: red;
+}
