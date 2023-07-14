@@ -5,6 +5,7 @@ export const blockedDomains = [
   'xhamster',
   'porn',
   'redtube',
+  'sex',
   'pornstar',
   'xxx',
   'xxnx',

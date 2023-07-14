@@ -18,14 +18,14 @@ chrome.storage.sync.get('censoredWords', (data) => {
   }
 });
 
-chrome.storage.sync.get('censoredDomains', (data) => {
-  if (!data.censoredDomains) {
+// chrome.storage.sync.get('censoredDomains', (data) => {
+  // if (!data.censoredDomains) {
     chrome.storage.sync.set({
       // prettier-ignore
       censoredDomains: blockedDomains,
     });
-  }
-});
+//   }
+// });
 
 let censoredDomains;
 chrome.storage.sync.get('censoredDomains', (result) => {

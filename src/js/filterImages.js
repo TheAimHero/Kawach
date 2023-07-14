@@ -1,40 +1,44 @@
-// Function to censor the text
-function censorImage(node) {
-  if (node.tagName === 'IMG') {
-    // node.style.filter = 'blur(5px)';
+import checkNsfw from '../utils/checkNsfw';
+import keepVisible from '../utils/keepVisible';
+import runModel from '../utils/runModel';
+
+let imgArr;
+
+function getImgArr() {
+  imgArr = keepVisible(document.querySelectorAll('img:not(.imgProcessed)'));
+}
+
+function blurImg() {
+  for (let i = 0; i < imgArr.length; i += 1) {
+    imgArr[i].style.filter = 'blur(10px)';
+    imgArr[i].crossOrigin = 'anonymous';
   }
 }
 
-// Function to recursively traverse the DOM tree and censor text
-function traverseDOM(node) {
-  censorImage(node);
-  node.childNodes.forEach(traverseDOM);
-}
-
-// Callback function for the mutation observer
-function handleMutation(mutationsList) {
-  mutationsList.forEach((mutation) => {
-    if (mutation.type === 'childList') {
-      mutation.addedNodes.forEach(traverseDOM);
-    } else if (mutation.type === 'characterData') {
-      censorImage(mutation.target);
-    }
+function censorImg() {
+  imgArr.forEach(async (img) => {
+    const prediction = await runModel(img);
+    img.classList.add('imgProcessed');
+    if (prediction && !checkNsfw(prediction)) img.style.filter = '';
   });
 }
 
-// Create a mutation observer
-const observer = new MutationObserver(handleMutation);
+let timer;
+function setTimer() {
+  clearTimeout(timer);
+  getImgArr();
+  blurImg();
+  timer = setTimeout(() => {
+    censorImg();
+  }, 300);
+}
 
-// Call the traverseDOM function even when the page has not finished loading
 function filterImages() {
-  traverseDOM(document.body);
-
-  // Observe changes in the DOM tree
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
+  clearTimeout(timer);
+  getImgArr();
+  blurImg();
+  censorImg();
+  window.addEventListener('scroll', setTimer);
 }
 
 export default filterImages;
