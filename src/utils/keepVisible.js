@@ -5,7 +5,7 @@ function isElementVisible(element) {
     && rect.bottom >= 0
     && rect.left <= (window.innerWidth || document.documentElement.clientWidth)
     && rect.right >= 0
-    && (rect.height > 300 || rect.width > 300)
+    && (rect.height > 100 || rect.width > 100)
   );
 }
 

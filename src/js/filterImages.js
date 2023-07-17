@@ -4,6 +4,16 @@ import runModel from '../utils/runModel';
 
 let imgArr;
 
+function debounce(func, delay) {
+  let timerId;
+  return function (...args) {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
 function getImgArr() {
   imgArr = keepVisible(document.querySelectorAll('img:not(.imgProcessed)'));
 }
@@ -29,7 +39,7 @@ function setTimer() {
   getImgArr();
   blurImg();
   timer = setTimeout(() => {
-    censorImg();
+    debounce(censorImg(), 1000);
   }, 300);
 }
 
