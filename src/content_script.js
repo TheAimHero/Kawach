@@ -23,10 +23,12 @@ if (video) {
   }, 3000);
 }
 
-filterText();
+// filterText();
 filterImages();
+window.scroll(0, 1);
+window.scrollBy(0, 1);
 
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener(message => {
   if (message.action === 'censorText') {
     filterText(message.selectedText);
   } else if (message.action === 'censorImage') {

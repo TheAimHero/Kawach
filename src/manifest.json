@@ -24,13 +24,16 @@
     {
       "matches": ["<all_urls>"],
       "js": ["dist/content_script.bundle.js"],
-      "run_at": "document_end"
+      "run_at": "document_start"
     }
   ],
   "host_permissions": ["<all_urls>"],
   "cross_origin_opener_policy": {
     "value": "same-origin"
   },
+
+  "options_page": "build/index.html",
+
   "permissions": [
     "privacy",
     "storage",

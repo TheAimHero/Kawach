@@ -12,6 +12,8 @@
     "ecmaVersion": "latest"
   },
   "rules": {
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "arrow-parens": "off",
+    "comma-dangle": "off"
   }
 }
