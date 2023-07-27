@@ -18,9 +18,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  object-fit: cover;
+  height: 80px;
+  width: 80px;
+  font-size: 30px;
   background-color: red;
-  padding: 30px 30px;
   border-radius: 50%;
 }
 
@@ -43,7 +44,6 @@ body {
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  object-fit: cover;
   background-color: blue;
   padding: 10px 30px;
 }

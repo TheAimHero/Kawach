@@ -1,40 +1,54 @@
-// Function to censor the text
-function censorImage(node) {
-  if (node.tagName === 'IMG') {
-    // node.style.filter = 'blur(5px)';
-  }
+import checkNsfw from '../utils/checkNsfw';
+import keepVisible from '../utils/keepVisible';
+import runModel from '../utils/runModel';
+
+let imgArr;
+
+function debounce(func, delay) {
+  let timerId;
+  return (...args) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
 }
 
-// Function to recursively traverse the DOM tree and censor text
-function traverseDOM(node) {
-  censorImage(node);
-  node.childNodes.forEach(traverseDOM);
+function getImgArr() {
+  imgArr = keepVisible(document.querySelectorAll('img:not(.imgProcessed)'));
 }
 
-// Callback function for the mutation observer
-function handleMutation(mutationsList) {
-  mutationsList.forEach((mutation) => {
-    if (mutation.type === 'childList') {
-      mutation.addedNodes.forEach(traverseDOM);
-    } else if (mutation.type === 'characterData') {
-      censorImage(mutation.target);
+function blurImg() {
+  chrome.storage.sync.get('blurAmt', data => {
+    for (let i = 0; i < imgArr.length; i += 1) {
+      imgArr[i].style.filter = `blur(${data.blurAmt}px)`;
+      imgArr[i].crossOrigin = 'anonymous';
     }
   });
 }
 
-// Create a mutation observer
-const observer = new MutationObserver(handleMutation);
+async function censorImg() {
+  const img = imgArr.pop();
+  const prediction = await runModel(img);
+  img.classList.add('imgProcessed');
+  if (prediction && !checkNsfw(prediction)) img.style.filter = '';
+  if (imgArr.length !== 0) censorImg();
+}
 
-// Call the traverseDOM function even when the page has not finished loading
+let timer;
+function setTimer() {
+  clearTimeout(timer);
+  getImgArr();
+  blurImg();
+  timer = setTimeout(() => {
+    debounce(censorImg(), 100);
+  }, 100);
+}
+
 function filterImages() {
-  traverseDOM(document.body);
-
-  // Observe changes in the DOM tree
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
+  const scrollEvent = new Event('scroll');
+  window.addEventListener('scroll', setTimer);
+  window.dispatchEvent(scrollEvent);
 }
 
 export default filterImages;
