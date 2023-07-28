@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import captureFrame from './js/captureFrame';
-import filterImages from './js/filterImages';
+// import filterImages from './js/filterImages';
 import filterText from './js/filterText';
 import filterSelectedImage from './js/filterSelectedImage';
 
@@ -23,10 +23,10 @@ if (video) {
   }, 3000);
 }
 
-// filterText();
-filterImages();
-window.scroll(0, 1);
-window.scrollBy(0, 1);
+if (window.self === window.top) {
+  filterText();
+  // filterImages();
+}
 
 chrome.runtime.onMessage.addListener(message => {
   if (message.action === 'censorText') {

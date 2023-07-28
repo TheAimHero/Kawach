@@ -9,7 +9,6 @@ async function getModel() {
 async function runModel(img) {
   try {
     if (!model) await getModel();
-    console.log(img);
     const predictions = await model.classify(img);
     return predictions;
   } catch (e) {
