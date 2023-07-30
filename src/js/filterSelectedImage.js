@@ -1,9 +1,9 @@
-import filterImages from './filterImages';
-
 function filterSelectedImage(imgSrc) {
-  // console.log(imgSrc);
-  const img = document.querySelector(`img[src="${imgSrc}"]`);
-  img.style.filter = 'blur(5px)';
+  chrome.storage.sync.get('blurAmt', data => {
+    // console.log(imgSrc);
+    const img = document.querySelector(`img[src="${imgSrc}"]`);
+    img.style.filter = `blur(${data.blurAmt}px)`;
+  });
 }
 
 export default filterSelectedImage;

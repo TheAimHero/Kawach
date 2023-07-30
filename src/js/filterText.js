@@ -1,4 +1,35 @@
+import runModel from '../utils/runModel';
+import checkNsfw from '../utils/checkNsfw';
+
 let censorWords;
+const arr = [];
+let status = 'open';
+
+async function tryModel() {
+  if (status === 'open') {
+    status = 'close';
+    const img = arr.shift();
+    if (img && img.dataset) {
+      const pred = await runModel(img);
+      if (pred && !checkNsfw(pred)) {
+        img.style.filter = 'none';
+      } else {
+        console.log('pred:', pred, 'img:', img);
+      }
+      img.dataset.imgProcessed = true;
+    }
+    status = 'open';
+    if (arr.length > 0) tryModel();
+  }
+}
+
+function processImg(node) {
+  if (node.dataset && !node.dataset.imgProcessed) {
+    arr.push(node);
+    tryModel();
+  }
+}
+
 // Function to censor the text
 function censorText(node) {
   chrome.storage.sync.get(['censorWords', 'censorChar'], data => {
@@ -19,6 +50,13 @@ function censorText(node) {
 // Function to recursively traverse the DOM tree and censor text
 function traverseDOM(node) {
   censorText(node);
+  if (node.nodeName === 'IMG') {
+    if (node.height >= 100 || node.width >= 100) {
+      node.style.filter = 'blur(20px)';
+      node.crossOrigin = 'anonymous';
+      processImg(node);
+    }
+  }
   node.childNodes.forEach(traverseDOM);
 }
 
@@ -44,14 +82,17 @@ function filterText(addWord) {
     censorWords.push(word);
     chrome.storage.sync.set({ censorWords });
   }
-  traverseDOM(document.body);
 
-  // Observe changes in the DOM tree
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
+  if (window.self === window.top) {
+    // Observe changes in the DOM tree
+    observer.observe(document, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributeFilter: ['src'],
+    });
+  }
 }
 
 export default filterText;

@@ -1,54 +1,64 @@
-import checkNsfw from '../utils/checkNsfw';
-import keepVisible from '../utils/keepVisible';
 import runModel from '../utils/runModel';
+import checkNsfw from '../utils/checkNsfw';
 
-let imgArr;
+const arr = [];
+let status = 'open';
 
-function debounce(func, delay) {
-  let timerId;
-  return (...args) => {
-    clearTimeout(timerId);
-    timerId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
+async function tryModel() {
+  if (status === 'open') {
+    status = 'close';
+    const img = arr.shift();
+    if (img && img.dataset) {
+      const pred = await runModel(img);
+      if (pred && !checkNsfw(pred)) {
+        img.style.filter = 'none';
+      } else {
+        console.log('pred:', pred, 'img:', img);
+      }
+      img.dataset.imgProcessed = true;
+    }
+    status = 'open';
+    if (arr.length > 0) tryModel();
+  }
 }
 
-function getImgArr() {
-  imgArr = keepVisible(document.querySelectorAll('img:not(.imgProcessed)'));
+function processImg(node) {
+  if (node.dataset && !node.dataset.imgProcessed) {
+    arr.push(node);
+    tryModel();
+  }
 }
 
-function blurImg() {
-  chrome.storage.sync.get('blurAmt', data => {
-    for (let i = 0; i < imgArr.length; i += 1) {
-      imgArr[i].style.filter = `blur(${data.blurAmt}px)`;
-      imgArr[i].crossOrigin = 'anonymous';
+function traverseDOM(node) {
+  if (node.nodeName === 'IMG') {
+    if (node.height >= 100 || node.width >= 100) {
+      node.style.filter = 'blur(20px)';
+      node.crossOrigin = 'anonymous';
+      processImg(node);
+    }
+  }
+  node.childNodes.forEach(traverseDOM);
+}
+
+function callback(mutationList) {
+  mutationList.forEach(mutation => {
+    if (mutation.type === 'childList') {
+      mutation.addedNodes.forEach(traverseDOM);
     }
   });
 }
 
-async function censorImg() {
-  const img = imgArr.pop();
-  const prediction = await runModel(img);
-  img.classList.add('imgProcessed');
-  if (prediction && !checkNsfw(prediction)) img.style.filter = '';
-  if (imgArr.length !== 0) censorImg();
-}
+const observer = new MutationObserver(callback);
 
-let timer;
-function setTimer() {
-  clearTimeout(timer);
-  getImgArr();
-  blurImg();
-  timer = setTimeout(() => {
-    debounce(censorImg(), 100);
-  }, 100);
+export default function filterImages() {
+  if (window.self === window.top) {
+    observer.observe(document, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributeFilter: ['src'],
+    });
+    tryModel();
+  }
 }
-
-function filterImages() {
-  const scrollEvent = new Event('scroll');
-  window.addEventListener('scroll', setTimer);
-  window.dispatchEvent(scrollEvent);
-}
-
-export default filterImages;
