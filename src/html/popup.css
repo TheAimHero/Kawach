@@ -1,8 +1,10 @@
 body {
   height: 150px;
   width: 300px;
-  margin: 0;
+  margin: 15px;
   color: white;
+  border: 2px solid black;
+  border-radius: 15px;
   background-color: grey;
   padding: 30px 30px;
 }
@@ -21,12 +23,13 @@ body {
   height: 80px;
   width: 80px;
   font-size: 30px;
-  background-color: red;
+  background-color: transparent;
+  border: 2px solid black;
   border-radius: 50%;
 }
 
 .circle:hover {
-  background-color: blue;
+  background-color: darkgray;
 }
 
 .badge_grp {
@@ -44,10 +47,14 @@ body {
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: blue;
+  background-color: transparent;
+  border: 2px solid black;
+  color: black;
+  font-weight: 600;
+  font-size: 1.3rem;
   padding: 10px 30px;
 }
 
 .badge:hover {
-  background-color: red;
+  background-color: darkgray;
 }
