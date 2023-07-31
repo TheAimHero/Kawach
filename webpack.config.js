@@ -8,6 +8,7 @@ module.exports = {
   mode: 'production',
   entry: {
     content_script: './src/content_script.js',
+    content_script_doc_end: './src/content_script_doc_end.js',
     background: './src/background.js',
   },
   output: {

@@ -14,6 +14,6 @@
   "rules": {
     "no-param-reassign": "off",
     "arrow-parens": "off",
-    "comma-dangle": "off"
+    "comma-dangle": "off""semi-spacing": "off"
   }
 }

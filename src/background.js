@@ -12,30 +12,29 @@ chrome.contextMenus.create({
   contexts: ['image'],
 });
 
-chrome.storage.sync.get('censorWords', data => {
+chrome.storage.sync.get(null, data => {
   if (!data.censorWords) {
     chrome.storage.sync.set({ censorWords: blockedWords });
   }
-});
 
-chrome.storage.sync.get('censorChar', data => {
   if (!data.censorChar) {
     chrome.storage.sync.set({ censorChar: '*' });
   }
-});
 
-chrome.storage.sync.get('blurAmt', data => {
   if (!data.blurAmt) {
     chrome.storage.sync.set({ blurAmt: '*' });
   }
-});
 
-chrome.storage.sync.get('censorSite', data => {
+  if (!data.censorChar) {
+    chrome.storage.sync.set({ censorChar: '*' });
+  }
+
   if (!data.censorSite) {
-    chrome.storage.sync.set({
-      // prettier-ignore
-      censorSite: blockedDomains,
-    });
+    chrome.storage.sync.set({ censorSite: blockedDomains });
+  }
+
+  if (!data.minDim) {
+    chrome.storage.sync.set({ minDim: 50 });
   }
 });
 
@@ -46,14 +45,14 @@ chrome.storage.sync.get('censorSite', result => {
 chrome.webRequest.onBeforeRequest.addListener(
   details => {
     const url = new URL(details.url);
-    const domain = url.hostname.split('.')[1];
+    const domain = url.hostname.split('.')[1].toLowerCase();
     if (censorSite.includes(domain)) {
       return { redirectUrl: chrome.extension.getURL('./html/blocked.html') };
     }
     return { cancel: false };
   },
   { urls: ['<all_urls>'] },
-  ['blocking']
+  ['blocking'],
 );
 
 // Add a listener for the context menu click event
