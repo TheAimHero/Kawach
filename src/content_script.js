@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
-import filter from './js/filter';
+// import filter from './js/filter';
 import filterText from './js/filterText';
 import filterSelectedImage from './js/filterSelectedImage';
 
-filter();
+// filter();
 
 chrome.runtime.onMessage.addListener(message => {
   if (message.action === 'censorText') {

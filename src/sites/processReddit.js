@@ -2,7 +2,7 @@ import addOverlay from '../utils/addOverlay';
 
 async function onCheck(jsonHref) {
   console.log('jsonHref:', jsonHref);
-  const res = await fetch(`http://localhost:3000/video`, {
+  const res = await fetch(`http://localhost:3000/video/reddit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ link: jsonHref }),
@@ -10,6 +10,7 @@ async function onCheck(jsonHref) {
     console.error(err.message);
   });
   const data = await res.json();
+  console.log('data:', data);
   return data.result;
 }
 
