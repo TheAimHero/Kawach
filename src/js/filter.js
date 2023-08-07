@@ -8,7 +8,7 @@ function censorText(node) {
   chrome.storage.sync.get(['censorWords', 'censorChar'], data => {
     censorWords = data.censorWords || [];
     censorWords.forEach(word => {
-      const pattern = new RegExp(word, 'gi');
+      const pattern = new RegExp(`\\b${word}\\b`, 'gi');
       if (node.nodeType === Node.TEXT_NODE && pattern.test(node.textContent)) {
         const censoredText = node.textContent.replace(
           pattern,

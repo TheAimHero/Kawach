@@ -5,11 +5,12 @@ function filterText(selectedText, filteredText) {
   const textNodes = getTextNodes();
   chrome.storage.sync.get('censorWords', data => {
     const newCensorWords = [...data.censorWords, textToFilter];
+    chrome.storage.sync.set({ censorWords: newCensorWords });
   });
   textNodes.forEach(node => {
     chrome.storage.sync.get('censorChar', data => {
       node.nodeValue = node.nodeValue.replace(
-        new RegExp(selectedText, 'gi'),
+        new RegExp(`\<${selectedText}\>`, 'gi'),
         data.censorChar.repeat(textToFilter.length),
       );
     });
