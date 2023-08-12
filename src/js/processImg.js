@@ -12,8 +12,6 @@ async function tryModel() {
       const pred = await runModel(img);
       if (pred && !checkNsfw(pred)) {
         img.style.filter = 'none';
-      } else {
-        console.log('pred:', pred, 'img:', img);
       }
       img.dataset.imgProcessed = true;
     }

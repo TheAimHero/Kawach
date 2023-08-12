@@ -11,7 +11,7 @@ async function onCheck(jsonHref) {
   });
   const data = await res.json();
   console.log('data:', data);
-  return data.result;
+  return data.data.type;
 }
 
 function processPlayer(shredditPlayer) {

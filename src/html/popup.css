@@ -5,7 +5,8 @@ body {
   color: white;
   border: 2px solid black;
   border-radius: 15px;
-  background-color: grey;
+  background-color: #8ec5fc;
+  background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
   padding: 30px 30px;
 }
 
@@ -29,7 +30,7 @@ body {
 }
 
 .circle:hover {
-  background-color: darkgray;
+  background-color: #8aa5fc;
 }
 
 .badge_grp {
@@ -56,5 +57,5 @@ body {
 }
 
 .badge:hover {
-  background-color: darkgray;
+  background-color: #8aa5fc;
 }

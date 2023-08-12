@@ -29,7 +29,8 @@ export default function addOverlay(node, onCheck) {
     if (!dataHref) overlay.remove();
     const jsonHref = `https://www.reddit.com${dataHref}.json`;
     const response = await onCheck(jsonHref);
-    if (!response) {
+    console.log('response:', response)
+    if (response === 'sfw') {
       overlay.remove();
       const videoPlayBtn = node.shadowRoot.querySelector('vds-play-button');
       videoPlayBtn.click();

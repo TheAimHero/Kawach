@@ -16,7 +16,7 @@ async function onCheck(jsonHref) {
   });
   const data = await res.json();
   console.log(data);
-  return data.result;
+  return data.data.type;
 }
 
 function addOverlay(node) {
@@ -43,11 +43,12 @@ function addOverlay(node) {
   button.addEventListener('click', async e => {
     e.stopPropagation();
     const data = await onCheck(currentHref);
-    // if (!data.result) {
-    //   node.removeEventListener('play', pauseVideo);
-    //   playBtn.click();
-    //   overlay.remove();
-    // }
+    if (data === 'sfw') {
+      console.log(data.data.type);
+      node.removeEventListener('play', pauseVideo);
+      playBtn.click();
+      overlay.remove();
+    }
   });
   overlay.appendChild(button);
   node.parentNode.appendChild(overlay);

@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  background-color: #8ec5fc;
+  background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+  padding: 0;
+}
+
+.horizontal-bar {
+  background-color: #000;
+  color: #fff;
+  height: 10%;
+  display: flex;
+  justify-content: left; /* Center the content horizontally */
+  padding-inline: 20px;
+  align-items: center;
+}
+
+.content-blocked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90%;
+}
+
+.exclamation-icon {
+  height: 100px;
+  margin-right: 30px; /* Adjust the margin as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
